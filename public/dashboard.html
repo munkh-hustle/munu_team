@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Manga Reader</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-book-open"></i>
+                MangaReader
+            </a>
+            <div class="nav-links">
+                <span id="userWelcome"></span>
+                <button id="logoutBtn" class="btn-login">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Welcome to Your Dashboard</h2>
+                <p>Start reading your favorite manga</p>
+            </div>
+            
+            <div class="manga-grid">
+                <!-- You can add manga listings here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('authToken');
+        const user = JSON.parse(localStorage.getItem('user'));
+        
+        if (!token || !user) {
+            window.location.href = '/login.html';
+            return;
+        }
+        
+        // Display user info
+        document.getElementById('userWelcome').textContent = `Welcome, ${user.username}!`;
+        
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        });
+    });
+    </script>
+</body>
+</html>

@@ -71,5 +71,66 @@
             <div id="message" class="message"></div>
         </div>
     </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const loginForm = document.getElementById('loginForm');
+  const messageDiv = document.getElementById('message');
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+  
+  // Toggle password visibility
+  if (togglePassword) {
+    togglePassword.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
+  }
+  
+  // Form submission
+  loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value
+    };
+    
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Store token and user data
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        showMessage('Login successful! Redirecting...', 'success');
+        setTimeout(() => {
+          window.location.href = '/dashboard.html'; // Create this page next
+        }, 1000);
+      } else {
+        showMessage(data.error || 'Login failed', 'error');
+      }
+    } catch (error) {
+      showMessage('Network error. Please try again.', 'error');
+    }
+  });
+  
+  function showMessage(text, type) {
+    messageDiv.textContent = text;
+    messageDiv.className = `message ${type}`;
+    messageDiv.style.display = 'block';
+  }
+});
+</script>
 </body>
 </html>

@@ -92,5 +92,75 @@
             <div id="message" class="message"></div>
         </div>
     </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const signupForm = document.getElementById('signupForm');
+  const messageDiv = document.getElementById('message');
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+  
+  // Toggle password visibility
+  if (togglePassword) {
+    togglePassword.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
+  }
+  
+  // Form submission
+  signupForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+      username: document.getElementById('username').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value,
+      confirmPassword: document.getElementById('confirmPassword').value
+    };
+    
+    // Basic validation
+    if (formData.password !== formData.confirmPassword) {
+      showMessage('Passwords do not match', 'error');
+      return;
+    }
+    
+    if (formData.password.length < 8) {
+      showMessage('Password must be at least 8 characters', 'error');
+      return;
+    }
+    
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        showMessage('Account created successfully! Redirecting to login...', 'success');
+        setTimeout(() => {
+          window.location.href = '/login.html';
+        }, 2000);
+      } else {
+        showMessage(data.error || 'Signup failed', 'error');
+      }
+    } catch (error) {
+      showMessage('Network error. Please try again.', 'error');
+    }
+  });
+  
+  function showMessage(text, type) {
+    messageDiv.textContent = text;
+    messageDiv.className = `message ${type}`;
+    messageDiv.style.display = 'block';
+  }
+});
+</script>
 </body>
 </html>

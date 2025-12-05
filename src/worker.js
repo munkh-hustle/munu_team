@@ -3,7 +3,7 @@ export default {
     const url = new URL(request.url);
     
     // Route to specific pages
-    if (url.pathname === '/' || url.pathname === '/index.html') {
+    if (url.pathname === '/' || url.pathname === '/login.html') {
       return env.ASSETS.fetch(request);
     } else if (url.pathname === '/login' || url.pathname === '/login.html') {
       // Modify the request URL to get login.html

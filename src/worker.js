@@ -1,20 +1,27 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const path = url.pathname;
-
-    // Handle different routes
-    if (path === '/' || path === '/index.html') {
-      return serveStaticFile('index.html', 'text/html');
-    } else if (path === '/login' || path === '/login.html') {
-      return serveStaticFile('login.html', 'text/html');
-    } else if (path === '/signup' || path === '/signup.html') {
-      return serveStaticFile('signup.html', 'text/html');
-    } else if (path === '/style.css') {
-      return serveStaticFile('style.css', 'text/css');
-    } else {
-      // Default to login page for any other route
-      return serveStaticFile('login.html', 'text/html');
+    
+    // Route to specific pages
+    if (url.pathname === '/' || url.pathname === '/index.html') {
+      return env.ASSETS.fetch(request);
+    } else if (url.pathname === '/login' || url.pathname === '/login.html') {
+      // Modify the request URL to get login.html
+      const newUrl = new URL(request.url);
+      newUrl.pathname = '/login.html';
+      return env.ASSETS.fetch(new Request(newUrl, request));
+    } else if (url.pathname === '/signup' || url.pathname === '/signup.html') {
+      // Modify the request URL to get signup.html
+      const newUrl = new URL(request.url);
+      newUrl.pathname = '/signup.html';
+      return env.ASSETS.fetch(new Request(newUrl, request));
+    } else if (url.pathname === '/style.css') {
+      return env.ASSETS.fetch(request);
     }
-  },
-};
+    
+    // Default: serve the signup page
+    const signupUrl = new URL(request.url);
+    signupUrl.pathname = '/signup.html';
+    return env.ASSETS.fetch(new Request(signupUrl, request));
+  }
+}

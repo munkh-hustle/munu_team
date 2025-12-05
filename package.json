@@ -1,0 +1,13 @@
+{
+  "name": "manga-reader",
+  "version": "1.0.0",
+  "description": "Manga Reader Web App",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.8.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

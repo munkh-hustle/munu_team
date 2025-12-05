@@ -1,0 +1,7 @@
+name = "manga-reader"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./public"  # Folder where your HTML files will be
+entry-point = "."
